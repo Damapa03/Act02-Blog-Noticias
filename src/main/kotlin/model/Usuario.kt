@@ -8,7 +8,7 @@ data class Usuario(
     val _id: String,
     val nombre: String,
     val nick: String,
-    val estado: Boolean = true,
+    val estado: Boolean,
     val direccion: Direccion,
     @BsonProperty("telefonos")
     val tlfn: List<String>,

@@ -1,20 +1,27 @@
 ﻿package repository
 
+import model.Noticia
+
 class NoticiaRepository {
+    private val db = Dao.getDatabase("blog")
+    private val coll = db.getCollection("collNoticias", Noticia::class.java)
+    fun createNoticia(noticia: Noticia){
+        coll.insertOne(noticia)
+    }
 
-    fun createNotice(){
+    fun updateNoticia(noticia: Noticia){
 
     }
 
-    fun getNoticeByUser(){
+    fun getNoticiaByUser(){
 
     }
 
-    fun getNoticeByTag(){
+    fun getNoticiaByTag(){
 
     }
 
-    fun getLast10Notices(){
+    fun getLast10Noticias(){
 
     }
 }
