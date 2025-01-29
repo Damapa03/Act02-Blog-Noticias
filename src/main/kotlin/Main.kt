@@ -119,13 +119,27 @@ fun main() {
                     }
 
                     if (num == 1) {
+                        println("Introduzca el nombre del usuario")
+                        val user = readln()
+                        val noticias = noticiaControler.getNoticiasByNick(user)
+
+                        noticias.forEachIndexed { index, noticia ->
+                            println("${index + 1} ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.autor}\n${noticia.tags}")
+                        }
+                        println("¿Quieres añadir algun comentario?\n 1. Si\n 2. No")
 
                     }
                     if (num == 2) {
-
+                        println("¿Cual es la etiqueta por la que quiere buscar?")
+                        val tag = readln()
+                        noticiaControler.getNoticiasByTag(tag).forEach{
+                            println(it)
+                        }
                     }
                     if (num == 3) {
-
+                        noticiaControler.get10LastNoticias().forEachIndexed { index, noticia ->
+                            println("${index + 1} ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.autor}\n${noticia.tags}")
+                        }
                     }
                     if (num == 4) {
 
@@ -139,7 +153,31 @@ fun main() {
                 }
             }
             if (num == 3) {
+                println("Noticias de $userLoged:")
+                val noticias = noticiaControler.getNoticiasByNick(userLoged)
+                noticias.forEachIndexed { index, noticia ->
+                    println("${index + 1}. ${noticia.titulo}\n${noticia.fechaPubli}\n${noticia.tags?.joinToString() ?: "Sin tags"}")
+                }
+                println("¿Que noticia quiere modificar?")
+                try {
+                    num = readLine()!!.toInt() + 1
+                } catch (e: Exception) {
+                    println("Introduzca un numero")
+                }
 
+                val id = noticias[num].fechaPubli
+
+                println("Ingrese el nuevo título de la noticia:")
+                val titulo = readLine()?.takeIf { it.isNotBlank() } ?: ""
+
+                println("Ingrese el nuevo cuerpo de la noticia:")
+                val cuerpo = readLine()?.takeIf { it.isNotBlank() } ?: ""
+
+                println("Ingrese los nuevos tags (separados por comas, opcional):")
+                val tagsInput = readLine()
+                val tags = tagsInput?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
+
+                noticiaControler.updateNoticia(id,titulo,cuerpo,tags)
             }
             if (num == 4) {
                 loged = !loged
