@@ -3,6 +3,7 @@
 import model.Comentario
 import repository.ComentarioRepository
 import repository.UsuarioRepository
+import java.time.Instant
 
 class ComentarioService {
     private val comentarioRepository = ComentarioRepository()
@@ -17,5 +18,9 @@ class ComentarioService {
         val user = usuarioRepository.getUserById(usuario)
 
         return user.estado
+    }
+
+    fun getComentarios(titulo: Instant) {
+        comentarioRepository.getComments(titulo)
     }
 }

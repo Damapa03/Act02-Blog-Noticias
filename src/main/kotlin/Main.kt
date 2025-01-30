@@ -176,7 +176,19 @@ fun main() {
                         }
                     }
                     if (num == 4) {
-
+                        println("Tus noticias")
+                        val noticias = noticiaControler.getNoticiasByNick(userLoged)
+                        var numNoticia = 0
+                        noticias.forEachIndexed { index, noticia ->
+                            println("${index + 1}. ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.tags?.joinToString() ?: "Sin tags"}")
+                        }
+                        println("¿De cual noticia quieres ver los comentarios?")
+                        try {
+                            numNoticia = readln().toInt() - 1
+                        } catch (e: Exception) {
+                            println("Introduzca un numero")
+                        }
+                        comentarioController.getComentarios(noticias[numNoticia].fechaPubli)
                     }
                     if (num == 5) {
                         break

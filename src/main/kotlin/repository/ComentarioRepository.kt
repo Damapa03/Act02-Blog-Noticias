@@ -1,6 +1,9 @@
 ﻿package repository
 
+import com.mongodb.client.model.Aggregates
+import com.mongodb.client.model.Filters
 import model.Comentario
+import java.time.Instant
 
 class ComentarioRepository {
     private val db = Dao.getDatabase("blog")
@@ -9,7 +12,18 @@ class ComentarioRepository {
         coll.insertOne(comentario)
     }
 
-    fun getComments(){
-
+    fun getComments(titulo: Instant) {
+        val pipeline = listOf(
+            Aggregates.lookup(
+                "collNoticias",
+                "noticia",
+                "fechaPubli",
+                "noticia_info"
+            )
+            , Aggregates.match(
+                Filters.eq("fechaPubli", titulo)
+            )
+        )
+        coll.aggregate(pipeline).toList()
     }
 }
