@@ -1,6 +1,7 @@
 ﻿import controller.ComentarioController
 import controller.NoticiaControler
 import controller.UsuarioController
+import model.Comentario
 import model.Direccion
 import model.Noticia
 import model.Usuario
@@ -130,19 +131,32 @@ fun main() {
                         }
                         while (true) {
                             println("¿Quieres añadir algun comentario?\n 1. Si\n 2. No")
+                            var numYN = 0
                             try {
-                                num = readLine()!!.toInt()
+                                numYN = readLine()!!.toInt()
                             } catch (e: Exception) {
                                 println("Introduzaca un numero")
                             }
-                            if (num == 1) {
+                            if (numYN == 1) {
+                                println("¿A que noticia quiere añadir un comentario?")
+                                var numComent = 0
+                                try {
+                                    numComent = readLine()!!.toInt() - 1
+                                } catch (e: Exception) {
+                                    println("Introduzca un numero")
+                                }
+                                println("Escriba su comentario")
+                                val comentarioText = readln()
+
+                                val comentario = Comentario(userLoged, noticias[numComent], comentarioText, Instant.now())
+
+                                comentarioController.createComentario(comentario)
 
                             }
-                            if (num == 2) {
-                                num = 5
+                            if (numYN == 2) {
                                 break
                             }
-                            if (num < 1 || num > 2) {
+                            if (numYN < 1 || numYN > 2) {
                                 println("Ingrese una opcion valido")
                             }
 
@@ -175,17 +189,18 @@ fun main() {
             if (num == 3) {
                 println("Tus noticias")
                 val noticias = noticiaControler.getNoticiasByNick(userLoged)
+                var numNoticia = 0
                 noticias.forEachIndexed { index, noticia ->
                     println("${index + 1}. ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.tags?.joinToString() ?: "Sin tags"}")
                 }
                 println("¿Que noticia quiere modificar?")
                 try {
-                    num = readLine()!!.toInt() - 1
+                    numNoticia = readLine()!!.toInt() - 1
                 } catch (e: Exception) {
                     println("Introduzca un numero")
                 }
 
-                val id = noticias[num].fechaPubli
+                val id = noticias[numNoticia].fechaPubli
 
                 println("Ingrese el nuevo título de la noticia:")
                 val titulo = readLine()?.takeIf { it.isNotBlank() } ?: ""

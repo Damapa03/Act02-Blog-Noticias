@@ -19,7 +19,7 @@ class UsuarioService {
     }
 
     fun checkIfEmailOrNickExists(email: String, nick: String): Boolean{
-        return if (email == usuarioRepository.getUserById(email) || nick == usuarioRepository.getUserByNick(nick)){
+        return if (email == usuarioRepository.checkUserById(email) || nick == usuarioRepository.checkUserByNick(nick)){
             true
         }else false
     }

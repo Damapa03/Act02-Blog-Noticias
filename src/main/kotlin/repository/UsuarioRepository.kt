@@ -14,12 +14,18 @@ class UsuarioRepository {
 
     fun login(nick: String): Boolean{
 
-        val user = getUserByNick(nick)
+        val user = checkUserByNick(nick)
 
         return nick == user
     }
 
-    fun getUserById(correo: String): String{
+    fun getUserById(userId: String): Usuario {
+        val filtro = Filters.eq("_id", userId)
+        val user = coll.find(filtro).first()
+
+        return user
+    }
+    fun checkUserById(correo: String): String{
         val filtro = Filters.eq("_id", correo)
         val user = coll.find(filtro).first()
 
@@ -28,7 +34,7 @@ class UsuarioRepository {
         }else ""
     }
 
-    fun getUserByNick(nick: String): String {
+    fun checkUserByNick(nick: String): String {
         val filtro = Filters.eq("nick", nick)
         val user = coll.find(filtro).first()
 
