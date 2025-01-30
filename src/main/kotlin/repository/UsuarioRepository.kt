@@ -9,9 +9,7 @@ class UsuarioRepository {
 
     fun register(usuario: Usuario) {
 
-        if (getUserById(usuario._id).isEmpty() or getUserByNick(usuario.nick).isEmpty()){
-            coll.insertOne(usuario)
-        }
+        coll.insertOne(usuario)
     }
 
     fun login(nick: String): Boolean{

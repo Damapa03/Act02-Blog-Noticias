@@ -12,8 +12,8 @@ class UsuarioController {
         }else return false
     }
 
-    fun register(usuario: Usuario){
-        usuarioService.register(usuario)
+    fun register(usuario: Usuario): Boolean {
+        return usuarioService.register(usuario)
     }
 
 }

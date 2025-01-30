@@ -10,16 +10,17 @@ class UsuarioService {
         return usuarioRepository.login(nick)
     }
 
-    fun register (usuario: Usuario){
+    fun register (usuario: Usuario): Boolean {
 
         if (!checkIfEmailOrNickExists(usuario._id, usuario.nick)){
             usuarioRepository.register(usuario)
-        }else println("El correo o el nick ya existen")
+            return true
+        }else return false
     }
 
     fun checkIfEmailOrNickExists(email: String, nick: String): Boolean{
-            if (email == usuarioRepository.getUserById(email) && nick == usuarioRepository.getUserByNick(nick)){
-                return true
-            }else return false
+        return if (email == usuarioRepository.getUserById(email) || nick == usuarioRepository.getUserByNick(nick)){
+            true
+        }else false
     }
 }

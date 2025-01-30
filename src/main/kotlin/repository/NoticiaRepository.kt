@@ -2,6 +2,7 @@
 
 import com.mongodb.client.FindIterable
 import com.mongodb.client.model.Filters
+import com.mongodb.client.model.Updates
 import model.Noticia
 import org.bson.Document
 import java.time.Instant
@@ -33,9 +34,11 @@ class NoticiaRepository {
             nuevoTags = noticia[0].tags
         }
 
-        val update = Document("\$set", Document("titulo", nuevoTitulo))
-            .append("\$set", Document("cuerpo", nuevoCuerpo))
-            .append("\$set", Document("tags", nuevoTags))
+        val update = Updates.combine(
+            Updates.set("titulo", nuevoTitulo),
+            Updates.set("cuerpo", nuevoCuerpo),
+            Updates.set("tags", nuevoTags)
+        )
 
         coll.updateOne(filtro, update)
     }
@@ -52,6 +55,10 @@ class NoticiaRepository {
     }
 
     fun getLast10Noticias(): List<Noticia> {
-        return coll.find().toList().sortedByDescending { it.fechaPubli }.subList(0, 10)
+        return try{
+            coll.find().toList().sortedByDescending { it.fechaPubli }.subList(0, 10)
+        }catch (e: Exception){
+            coll.find().toList().sortedByDescending { it.fechaPubli }
+        }
     }
 }

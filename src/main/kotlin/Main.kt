@@ -31,7 +31,7 @@ fun main() {
                     println("Login exitoso")
                     loged = !loged
                     userLoged = nick
-                }else println("El nick no existe")
+                } else println("El nick no existe")
             }
             if (num == 2) {
                 print("Ingrese el correo: ")
@@ -64,15 +64,17 @@ fun main() {
                 val cantidadTelefonos = readLine()?.toIntOrNull() ?: 0
 
                 val telefonos = mutableListOf<String>()
+
                 for (i in 1..cantidadTelefonos) {
                     print("Ingrese teléfono $i: ")
                     telefonos.add(readLine().orEmpty())
                 }
 
                 val usuario = Usuario(id, nombre, nick, true, direccion, telefonos)
-                usuarioController.register(usuario)
-                loged = !loged
-                userLoged = usuario.nick
+                if (usuarioController.register(usuario)) {
+                    loged = !loged
+                    userLoged = usuario.nick
+                } else println("El correo o el nick ya existen")
             }
             if (num == 3) {
                 break
@@ -82,7 +84,7 @@ fun main() {
             }
         }
         if (loged) {
-            println("1. Publicar noticia\n2. Ver noticias\n3. Modificar Noticia\n4. Salir")
+            println("1. Publicar noticia\n2. Ver noticias\n3. Modificar noticia\n4. Salir")
             try {
                 num = readLine()!!.toInt()
             } catch (e: Exception) {
@@ -124,21 +126,39 @@ fun main() {
                         val noticias = noticiaControler.getNoticiasByNick(user)
 
                         noticias.forEachIndexed { index, noticia ->
-                            println("${index + 1} ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.autor}\n${noticia.tags}")
+                            println("${index + 1} ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\nAutor: ${noticia.autor}\nTags: ${noticia.tags}")
                         }
-                        println("¿Quieres añadir algun comentario?\n 1. Si\n 2. No")
+                        while (true) {
+                            println("¿Quieres añadir algun comentario?\n 1. Si\n 2. No")
+                            try {
+                                num = readLine()!!.toInt()
+                            } catch (e: Exception) {
+                                println("Introduzaca un numero")
+                            }
+                            if (num == 1) {
+
+                            }
+                            if (num == 2) {
+                                num = 5
+                                break
+                            }
+                            if (num < 1 || num > 2) {
+                                println("Ingrese una opcion valido")
+                            }
+
+                        }
 
                     }
                     if (num == 2) {
                         println("¿Cual es la etiqueta por la que quiere buscar?")
                         val tag = readln()
-                        noticiaControler.getNoticiasByTag(tag).forEach{
+                        noticiaControler.getNoticiasByTag(tag).forEach {
                             println(it)
                         }
                     }
                     if (num == 3) {
                         noticiaControler.get10LastNoticias().forEachIndexed { index, noticia ->
-                            println("${index + 1} ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.autor}\n${noticia.tags}")
+                            println("${index + 1} ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\nAutor: ${noticia.autor}\nTags: ${noticia.tags}")
                         }
                     }
                     if (num == 4) {
@@ -153,14 +173,14 @@ fun main() {
                 }
             }
             if (num == 3) {
-                println("Noticias de $userLoged:")
+                println("Tus noticias")
                 val noticias = noticiaControler.getNoticiasByNick(userLoged)
                 noticias.forEachIndexed { index, noticia ->
-                    println("${index + 1}. ${noticia.titulo}\n${noticia.fechaPubli}\n${noticia.tags?.joinToString() ?: "Sin tags"}")
+                    println("${index + 1}. ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.tags?.joinToString() ?: "Sin tags"}")
                 }
                 println("¿Que noticia quiere modificar?")
                 try {
-                    num = readLine()!!.toInt() + 1
+                    num = readLine()!!.toInt() - 1
                 } catch (e: Exception) {
                     println("Introduzca un numero")
                 }
@@ -177,7 +197,7 @@ fun main() {
                 val tagsInput = readLine()
                 val tags = tagsInput?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
 
-                noticiaControler.updateNoticia(id,titulo,cuerpo,tags)
+                noticiaControler.updateNoticia(id, titulo, cuerpo, tags)
             }
             if (num == 4) {
                 loged = !loged
