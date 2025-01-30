@@ -1,6 +1,5 @@
 ﻿package repository
 
-import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Filters
 import model.Comentario
 import java.time.Instant
@@ -12,18 +11,14 @@ class ComentarioRepository {
         coll.insertOne(comentario)
     }
 
-    fun getComments(titulo: Instant) {
-        val pipeline = listOf(
-            Aggregates.lookup(
-                "collNoticias",
-                "noticia",
-                "fechaPubli",
-                "noticia_info"
-            )
-            , Aggregates.match(
-                Filters.eq("fechaPubli", titulo)
-            )
-        )
-        coll.aggregate(pipeline).toList()
+    fun getComments(fechaPubli: Instant): List<Comentario> {
+        val filter = Filters.eq("noticia.fechaPubli", fechaPubli)
+        return coll.find(filter).toList()
     }
+
+    fun eliminarComentarios(fechaPubli: Instant) {
+        val filter = Filters.eq("noticia.fechaPubli", fechaPubli)
+        coll.deleteMany(filter)
+    }
+
 }

@@ -26,4 +26,8 @@ class NoticiaControler {
     fun get10LastNoticias(): List<Noticia> {
         return noticiaService.get10LastNoticias()
     }
+
+    fun elminarNoticia(fechaPubli: Instant) {
+        noticiaService.eliminiarNoticia(fechaPubli)
+    }
 }

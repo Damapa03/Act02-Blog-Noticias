@@ -7,8 +7,7 @@ import java.time.Instant
 
 class NoticiaService {
     private val noticiaRepository = NoticiaRepository()
-
-//    fun getNoticias(): List<Noticia> {}
+    private val comentarioService = ComentarioService()
 
     fun insertNoticia(noticia: Noticia) {
         noticiaRepository.createNoticia(noticia)
@@ -28,5 +27,10 @@ class NoticiaService {
 
     fun get10LastNoticias(): List<Noticia> {
         return noticiaRepository.getLast10Noticias()
+    }
+
+    fun eliminiarNoticia(fechaPubli: Instant) {
+        comentarioService.eliminarComentarios(fechaPubli)
+        noticiaRepository.eliminarNoticia(fechaPubli)
     }
 }

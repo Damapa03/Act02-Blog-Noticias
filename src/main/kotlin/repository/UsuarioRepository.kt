@@ -19,8 +19,8 @@ class UsuarioRepository {
         return nick == user
     }
 
-    fun getUserById(userId: String): Usuario {
-        val filtro = Filters.eq("_id", userId)
+    fun getUserByNick(userNick: String): Usuario? {
+        val filtro = Filters.eq("nick", userNick)
         val user = coll.find(filtro).first()
 
         return user
@@ -29,9 +29,7 @@ class UsuarioRepository {
         val filtro = Filters.eq("_id", correo)
         val user = coll.find(filtro).first()
 
-        return if (user != null) {
-            user._id.toString()
-        }else ""
+        return user?._id ?: ""
     }
 
     fun checkUserByNick(nick: String): String {

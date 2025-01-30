@@ -20,13 +20,13 @@ fun main() {
         if (!loged) {
             println("1. Login\n2. Register\n3. Salir")
             try {
-                num = readLine()!!.toInt()
+                num = readln().toInt()
             } catch (e: Exception) {
                 println("Introduzaca un numero")
             }
             if (num == 1) {
                 println("Introduzca el nick")
-                val nick = readLine()!!
+                val nick = readln()
 
                 if (usuarioController.login(nick)) {
                     println("Login exitoso")
@@ -36,39 +36,39 @@ fun main() {
             }
             if (num == 2) {
                 print("Ingrese el correo: ")
-                val id = readLine().orEmpty()
+                val id = readlnOrNull().orEmpty()
 
                 print("Ingrese nombre: ")
-                val nombre = readLine().orEmpty()
+                val nombre = readlnOrNull().orEmpty()
 
                 print("Ingrese nick: ")
-                val nick = readLine().orEmpty()
+                val nick = readlnOrNull().orEmpty()
 
                 print("Ingrese calle: ")
-                val calle = readLine().orEmpty()
+                val calle = readlnOrNull().orEmpty()
 
                 print("Ingrese número: ")
-                val num = readLine().orEmpty()
+                val num = readlnOrNull().orEmpty()
 
                 print("Ingrese puerta: ")
-                val puerta = readLine().orEmpty()
+                val puerta = readlnOrNull().orEmpty()
 
                 print("Ingrese código postal: ")
-                val cp = readLine().orEmpty()
+                val cp = readlnOrNull().orEmpty()
 
                 print("Ingrese ciudad: ")
-                val ciudad = readLine().orEmpty()
+                val ciudad = readlnOrNull().orEmpty()
 
                 val direccion = Direccion(calle, num, puerta, cp, ciudad)
 
                 print("Ingrese cantidad de teléfonos: ")
-                val cantidadTelefonos = readLine()?.toIntOrNull() ?: 0
+                val cantidadTelefonos = readlnOrNull()?.toIntOrNull() ?: 0
 
                 val telefonos = mutableListOf<String>()
 
                 for (i in 1..cantidadTelefonos) {
                     print("Ingrese teléfono $i: ")
-                    telefonos.add(readLine().orEmpty())
+                    telefonos.add(readlnOrNull().orEmpty())
                 }
 
                 val usuario = Usuario(id, nombre, nick, true, direccion, telefonos)
@@ -85,21 +85,22 @@ fun main() {
             }
         }
         if (loged) {
-            println("1. Publicar noticia\n2. Ver noticias\n3. Modificar noticia\n4. Salir")
+            println("1. Publicar noticia\n2. Ver noticias\n3. Modificar noticia\n4. Eliminar noticia\n5. Salir")
+            var numMenu = 0
             try {
-                num = readLine()!!.toInt()
+                numMenu = readln().toInt()
             } catch (e: Exception) {
                 println("Introduzaca un numero")
             }
-            if (num == 1) {
+            if (numMenu == 1) {
                 println("Ingrese el título de la noticia:")
-                val titulo = readLine()?.takeIf { it.isNotBlank() } ?: "Sin título"
+                val titulo = readlnOrNull()?.takeIf { it.isNotBlank() } ?: "Sin título"
 
                 println("Ingrese el cuerpo de la noticia:")
-                val cuerpo = readLine()?.takeIf { it.isNotBlank() } ?: "Sin contenido"
+                val cuerpo = readlnOrNull()?.takeIf { it.isNotBlank() } ?: "Sin contenido"
 
                 println("Ingrese los tags (separados por comas, opcional):")
-                val tagsInput = readLine()
+                val tagsInput = readlnOrNull()
                 val tags = tagsInput?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
 
                 val noticia = Noticia(
@@ -112,16 +113,17 @@ fun main() {
 
                 noticiaControler.createNoticia(noticia)
             }
-            if (num == 2) {
+            if (numMenu == 2) {
                 while (true) {
                     println("1. Ver noticias de un usuario\n2. Buscar notica por etiquetas\n3. Ver 10 ultimas noticias\n4. Ver comentarios de una noticia\n5. Salir")
+                    var numMostrar = 0
                     try {
-                        num = readLine()!!.toInt()
+                        numMostrar = readln().toInt()
                     } catch (e: Exception) {
                         println("Introduzaca un numero")
                     }
 
-                    if (num == 1) {
+                    if (numMostrar == 1) {
                         println("Introduzca el nombre del usuario")
                         val user = readln()
                         val noticias = noticiaControler.getNoticiasByNick(user)
@@ -133,7 +135,7 @@ fun main() {
                             println("¿Quieres añadir algun comentario?\n 1. Si\n 2. No")
                             var numYN = 0
                             try {
-                                numYN = readLine()!!.toInt()
+                                numYN = readln().toInt()
                             } catch (e: Exception) {
                                 println("Introduzaca un numero")
                             }
@@ -141,7 +143,7 @@ fun main() {
                                 println("¿A que noticia quiere añadir un comentario?")
                                 var numComent = 0
                                 try {
-                                    numComent = readLine()!!.toInt() - 1
+                                    numComent = readln().toInt() - 1
                                 } catch (e: Exception) {
                                     println("Introduzca un numero")
                                 }
@@ -163,19 +165,19 @@ fun main() {
                         }
 
                     }
-                    if (num == 2) {
+                    if (numMostrar == 2) {
                         println("¿Cual es la etiqueta por la que quiere buscar?")
                         val tag = readln()
                         noticiaControler.getNoticiasByTag(tag).forEach {
                             println(it)
                         }
                     }
-                    if (num == 3) {
+                    if (numMostrar == 3) {
                         noticiaControler.get10LastNoticias().forEachIndexed { index, noticia ->
                             println("${index + 1} ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\nAutor: ${noticia.autor}\nTags: ${noticia.tags}")
                         }
                     }
-                    if (num == 4) {
+                    if (numMostrar == 4) {
                         println("Tus noticias")
                         val noticias = noticiaControler.getNoticiasByNick(userLoged)
                         var numNoticia = 0
@@ -188,17 +190,19 @@ fun main() {
                         } catch (e: Exception) {
                             println("Introduzca un numero")
                         }
-                        comentarioController.getComentarios(noticias[numNoticia].fechaPubli)
+                        comentarioController.getComentarios(noticias[numNoticia].fechaPubli).forEach {
+                            println("${it.usuario}:\n ${it.texto}")
+                        }
                     }
-                    if (num == 5) {
+                    if (numMostrar == 5) {
                         break
                     }
-                    if (num < 1 || num > 5) {
+                    if (numMostrar < 1 || numMostrar > 5) {
                         println("Ingrese una opcion valido")
                     }
                 }
             }
-            if (num == 3) {
+            if (numMenu == 3) {
                 println("Tus noticias")
                 val noticias = noticiaControler.getNoticiasByNick(userLoged)
                 var numNoticia = 0
@@ -207,7 +211,7 @@ fun main() {
                 }
                 println("¿Que noticia quiere modificar?")
                 try {
-                    numNoticia = readLine()!!.toInt() - 1
+                    numNoticia = readln().toInt() - 1
                 } catch (e: Exception) {
                     println("Introduzca un numero")
                 }
@@ -215,21 +219,37 @@ fun main() {
                 val id = noticias[numNoticia].fechaPubli
 
                 println("Ingrese el nuevo título de la noticia:")
-                val titulo = readLine()?.takeIf { it.isNotBlank() } ?: ""
+                val titulo = readlnOrNull()?.takeIf { it.isNotBlank() } ?: ""
 
                 println("Ingrese el nuevo cuerpo de la noticia:")
-                val cuerpo = readLine()?.takeIf { it.isNotBlank() } ?: ""
+                val cuerpo = readlnOrNull()?.takeIf { it.isNotBlank() } ?: ""
 
                 println("Ingrese los nuevos tags (separados por comas, opcional):")
-                val tagsInput = readLine()
+                val tagsInput = readlnOrNull()
                 val tags = tagsInput?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
 
                 noticiaControler.updateNoticia(id, titulo, cuerpo, tags)
             }
-            if (num == 4) {
+            if (numMenu == 4){
+                println("Tus noticias")
+                val noticias = noticiaControler.getNoticiasByNick(userLoged)
+                var numEleminiar = 0
+                noticias.forEachIndexed { index, noticia ->
+                    println("${index + 1}. ${noticia.titulo}\n${noticia.cuerpo}\n${noticia.fechaPubli}\n${noticia.tags?.joinToString() ?: "Sin tags"}")
+                }
+                println("¿Que noticia quiere eliminar?")
+                try {
+                    numEleminiar = readln().toInt() - 1
+                } catch (e: Exception) {
+                    println("Introduzca un numero")
+                }
+
+                noticiaControler.elminarNoticia(noticias[numEleminiar].fechaPubli)
+            }
+            if (numMenu == 5) {
                 loged = !loged
             }
-            if (num < 1 || num > 4) {
+            if (numMenu < 1 || numMenu > 5) {
                 println("Ingrese una opcion valido")
             }
         }

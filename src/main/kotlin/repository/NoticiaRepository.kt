@@ -61,4 +61,10 @@ class NoticiaRepository {
             coll.find().toList().sortedByDescending { it.fechaPubli }
         }
     }
+
+    fun eliminarNoticia(fechaPubli: Instant) {
+        val filter = Filters.eq("fechaPubli", fechaPubli)
+
+        coll.deleteOne(filter)
+    }
 }

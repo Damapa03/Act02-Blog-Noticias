@@ -11,16 +11,23 @@ class ComentarioService {
 
     fun createComment(comentario: Comentario) {
 
-        if (isUserNotBanned(comentario.usuario)){ comentarioRepository.createComment(comentario) }
+        if (isUserNotBanned(comentario.usuario)){ comentarioRepository.createComment(comentario)
+        }else println("Usuario baneado")
     }
 
     fun isUserNotBanned(usuario: String): Boolean {
-        val user = usuarioRepository.getUserById(usuario)
+        val user = usuarioRepository.getUserByNick(usuario)
 
-        return user.estado
+        return user?.estado ?: false
     }
 
-    fun getComentarios(titulo: Instant) {
-        comentarioRepository.getComments(titulo)
+    fun getComentarios(titulo: Instant): List<Comentario> {
+        return comentarioRepository.getComments(titulo)
+    }
+
+    fun eliminarComentarios(fechaPubli: Instant) {
+        if(comentarioRepository.getComments(fechaPubli).isNotEmpty()){
+            comentarioRepository.eliminarComentarios(fechaPubli)
+        }
     }
 }

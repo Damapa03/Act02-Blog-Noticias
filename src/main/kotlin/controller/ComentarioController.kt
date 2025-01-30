@@ -11,7 +11,7 @@ class ComentarioController {
         comentarioService.createComment(comentario)
     }
 
-    fun getComentarios(titulo: Instant) {
-        comentarioService.getComentarios(titulo)
+    fun getComentarios(titulo: Instant): List<Comentario> {
+       return comentarioService.getComentarios(titulo)
     }
 }
